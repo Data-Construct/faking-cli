@@ -1,6 +1,10 @@
 use std::path::PathBuf;
+use clap::{error, Parser, Subcommand};
 
-use clap::{Parser, Subcommand};
+use crate::json_reader::deserialize::deserialize;
+
+mod file_reader;
+mod json_reader;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -40,6 +44,17 @@ fn main() {
 
     if let Some(config_path) = cli.config.as_deref() {
         println!("Value for config: {}", config_path.display());
+        let mut vec_res = match file_reader::read(config_path) {
+          Ok(res) => res,
+          Err(error) => return println!("{}", error)
+        };
+
+        let mut struct_res = match deserialize(vec_res) {
+          Ok(res) => res,
+          Err(error) => return println!("{}", error)
+        };
+
+        println!("FIN: {}", struct_res.field_name);
     }
 
     // You can see how many times a particular flag or argument occurred
