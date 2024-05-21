@@ -2,6 +2,12 @@
 name = "faking"
 version = "0.1.0"
 edition = "2021"
+description = "faking is a cli tool that generates test data in various formats from a given schema"
+license = "MPL-2.0"
+# homepage = ""
+repository = "https://github.com/Data-Construct/faking-cli"
+keywords = ["cli"]
+categories = ["command-line-utilities", "development-tools"] # "encoding"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
