@@ -1,5 +1,5 @@
 [package]
-name = "faking-cli"
+name = "faking"
 version = "0.1.0"
 edition = "2021"
 
