@@ -40,15 +40,15 @@
 			"field_name": "new-row-3",
 			"null": {
 				"str": null,
-				"percentage": 0
+				"percentage": 40
 			},
 			"array": {
-				"active": false,
-				"min": 0,
+				"active": true,
+				"min": 1,
 				"max": 10,
 				"null": {
 					"str": null,
-					"percentage": 0
+					"percentage": 30
 				}
 			},
 			"fields": [
@@ -58,15 +58,15 @@
 					"generator_arguments": null,
 					"null": {
 						"str": null,
-						"percentage": 0
+						"percentage": 20
 					},
 					"array": {
-						"active": false,
-						"min": 0,
-						"max": 0,
+						"active": true,
+						"min": 1,
+						"max": 3,
 						"null": {
 							"str": null,
-							"percentage": 0
+							"percentage": 20
 						}
 					}
 				},
@@ -148,7 +148,7 @@
 			"field_name": "new-row-4objjjjjjj",
 			"null": {
 				"str": null,
-				"percentage": 0
+				"percentage": 20
 			},
 			"array": {
 				"active": false,
