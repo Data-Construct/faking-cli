@@ -1,6 +1,12 @@
 use rand::Rng;
 
-use crate::{data_faking_bridge::assoc::{get_func_from_string, FNVARI}, json_reader::{obj::{DTObj, FieldsEnum, Obj}, row::Row}};
+use crate::{
+    data_faking_bridge::assoc::{get_func_from_string, FNVARI},
+    json_reader::{
+        obj::{DTObj, FieldsEnum, Obj},
+        row::Row,
+    },
+};
 
 pub fn generate_json_output(grs: &DTObj, n_rows: i64) {
     let mut content = "[\n".to_owned();
@@ -60,10 +66,6 @@ fn loop_through_nested_obj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                         }
                     }
                 }
-
-                if i != rows.len() - 1 {
-                    oc.push_str(",\n");
-                }
             }
 
             FieldsEnum::Row(row) => {
@@ -84,21 +86,21 @@ fn loop_through_nested_obj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                     }
                 } else {
                     if row.null.percentage == 0 {
-                        oc.push_str(create_field_string(&row.generator).as_str());
+                        create_field_string(&mut oc, &row.generator);
                     } else {
                         let rand_roll = rand::thread_rng().gen_range(0..100);
                         if row.null.percentage < rand_roll {
-                            oc.push_str(create_field_string(&row.generator).as_str());
+                            create_field_string(&mut oc, &row.generator);
                         } else {
                             insert_null_or_custom_string(&mut oc, &row.null.str);
                         }
                     }
                 }
-
-                if i != rows.len() - 1 {
-                    oc.push_str(",\n");
-                }
             }
+        }
+
+        if i != rows.len() - 1 {
+            oc.push_str(",\n");
         }
     }
 
@@ -131,8 +133,8 @@ fn insert_null_or_custom_string(oc: &mut String, null_string: &Option<String>) {
 fn obj_array_generation(oc: &mut String, obj: &Obj, depth: i16) {
     let arr_range = rand::thread_rng().gen_range(obj.array.min..obj.array.max);
 
-    oc.push_str("[\n");
-    oc.push_str("\t\t\t");
+    insert_depth_indentation(oc, depth, "[\n\t\t\t", "");
+
     for _a in 0..depth {
         oc.push_str("\t");
     }
@@ -143,29 +145,18 @@ fn obj_array_generation(oc: &mut String, obj: &Obj, depth: i16) {
         } else {
             let rand_roll = rand::thread_rng().gen_range(0..100);
             if obj.array.null.percentage < rand_roll {
-                oc.push_str(
-                    loop_through_nested_obj(&obj.fields, depth + 2).as_str(),
-                );
+                oc.push_str(loop_through_nested_obj(&obj.fields, depth + 2).as_str());
             } else {
                 insert_null_or_custom_string(oc, &obj.array.null.str);
             }
         }
 
         if a != arr_range - 1 {
-            oc.push_str(",\n");
-
-            oc.push_str("\t\t\t");
-            for _a in 0..depth {
-                oc.push_str("\t");
-            }
+            insert_depth_indentation(oc, depth, ",\n\t\t\t", "");
         }
     }
 
-    oc.push_str("\n\t\t");
-    for _a in 0..depth {
-        oc.push_str("\t");
-    }
-    oc.push_str("]");
+    insert_depth_indentation(oc, depth, "\n\t\t", "]");
 }
 
 fn row_array_generation(oc: &mut String, row: &Row) {
@@ -175,11 +166,11 @@ fn row_array_generation(oc: &mut String, row: &Row) {
 
     for a in 0..arr_range {
         if row.array.null.percentage == 0 {
-            oc.push_str(create_field_string(&row.generator).as_str());
+            create_field_string(oc, &row.generator);
         } else {
             let rand_roll = rand::thread_rng().gen_range(0..100);
             if row.array.null.percentage < rand_roll {
-                oc.push_str(create_field_string(&row.generator).as_str());
+                create_field_string(oc, &row.generator);
             } else {
                 insert_null_or_custom_string(oc, &row.array.null.str);
             }
@@ -193,9 +184,8 @@ fn row_array_generation(oc: &mut String, row: &Row) {
     oc.push_str("]");
 }
 
-fn create_field_string(rs: &String) -> String {
-    let mut oc = "".to_owned();
-
+#[inline(always)]
+fn create_field_string(oc: &mut String, rs: &String) {
     // TODO(clearfeld): do this once and save the FN_E pointer instead of always doing the lookup
     // this function shouldn't need to take in a &String at all
     let x = get_func_from_string(rs);
@@ -215,6 +205,4 @@ fn create_field_string(rs: &String) -> String {
             oc.push_str("\"");
         }
     }
-
-    oc
 }
