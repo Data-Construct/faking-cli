@@ -147,9 +147,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
 
                         for a in 0..arr_range {
                             if obj.array.null.percentage == 0 {
-                                oc.push_str(
-                                    LoopThroughNestedObj(&obj.fields, depth + 2).as_str(),
-                                );
+                                oc.push_str(LoopThroughNestedObj(&obj.fields, depth + 2).as_str());
                             } else {
                                 let rand_roll = rand::thread_rng().gen_range(0..100);
                                 if obj.array.null.percentage < rand_roll {
@@ -157,10 +155,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                                         LoopThroughNestedObj(&obj.fields, depth + 2).as_str(),
                                     );
                                 } else {
-                                    oc.push_str(
-                                        insert_null_or_custom_string(&obj.array.null.str)
-                                            .as_str(),
-                                    );
+                                    insert_null_or_custom_string(&mut oc, &obj.array.null.str);
                                 }
                             }
 
@@ -203,10 +198,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                                             LoopThroughNestedObj(&obj.fields, depth + 2).as_str(),
                                         );
                                     } else {
-                                        oc.push_str(
-                                            insert_null_or_custom_string(&obj.array.null.str)
-                                                .as_str(),
-                                        );
+                                        insert_null_or_custom_string(&mut oc, &obj.array.null.str);
                                     }
                                 }
 
@@ -226,7 +218,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                             }
                             oc.push_str("]");
                         } else {
-                            oc.push_str(insert_null_or_custom_string(&obj.null.str).as_str());
+                            insert_null_or_custom_string(&mut oc, &obj.null.str);
                         }
                     }
                 } else {
@@ -237,7 +229,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                         if obj.null.percentage < rand_roll {
                             oc.push_str(LoopThroughNestedObj(&obj.fields, depth + 1).as_str());
                         } else {
-                            oc.push_str(insert_null_or_custom_string(&obj.null.str).as_str());
+                            insert_null_or_custom_string(&mut oc, &obj.null.str);
                         }
                     }
                 }
@@ -266,9 +258,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                                 if row.array.null.percentage < rand_roll {
                                     oc.push_str(CreateFieldString(&row.generator).as_str());
                                 } else {
-                                    oc.push_str(
-                                        insert_null_or_custom_string(&row.array.null.str).as_str(),
-                                    );
+                                    insert_null_or_custom_string(&mut oc, &row.array.null.str);
                                 }
                             }
 
@@ -294,10 +284,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                                     if row.array.null.percentage < rand_roll {
                                         oc.push_str(CreateFieldString(&row.generator).as_str());
                                     } else {
-                                        oc.push_str(
-                                            insert_null_or_custom_string(&row.array.null.str)
-                                                .as_str(),
-                                        );
+                                        insert_null_or_custom_string(&mut oc, &row.array.null.str);
                                     }
                                 }
 
@@ -308,7 +295,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
 
                             oc.push_str("]");
                         } else {
-                            oc.push_str(insert_null_or_custom_string(&row.null.str).as_str());
+                            insert_null_or_custom_string(&mut oc, &row.null.str);
                         }
                     }
                 } else {
@@ -319,7 +306,7 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
                         if row.null.percentage < rand_roll {
                             oc.push_str(CreateFieldString(&row.generator).as_str());
                         } else {
-                            oc.push_str(insert_null_or_custom_string(&row.null.str).as_str());
+                            insert_null_or_custom_string(&mut oc, &row.null.str);
                         }
                     }
                 }
@@ -342,26 +329,22 @@ fn LoopThroughNestedObj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
 }
 
 #[inline(always)]
-fn insert_null_or_custom_string(null_string: &Option<String>) -> String {
-    let mut oc = "".to_owned();
-
+fn insert_null_or_custom_string(oc: &mut String, null_string: &Option<String>) {
     match null_string {
         Some(x) => {
             oc.push_str("\"");
-            // TOOD(clearfled): convert this to a &str in the future to avoid additional string allocations
             oc.push_str(x.as_str());
             oc.push_str("\"");
         }
         None => oc.push_str("null"),
     }
-
-    oc
 }
 
 fn CreateFieldString(rs: &String) -> String {
     let mut oc = "".to_owned();
 
     // TODO(clearfeld): do this once and save the FN_E pointer instead of always doing the lookup
+    // this function shouldn't need to take in a &String at all
     let x = get_func_from_string(rs);
 
     match x {
