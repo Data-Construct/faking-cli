@@ -4,4 +4,6 @@
 
 ```bash
 cargo run -- --help
+
+cargo run -- -c .\schemas\testcase.json
 ```

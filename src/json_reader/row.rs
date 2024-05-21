@@ -8,10 +8,9 @@ pub struct GeneratorArgs {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Row {
-  pub id: String,
   pub field_name: String,
   pub generator: String,
-  pub generator_arguments: GeneratorArgs,
+  pub generator_arguments: Option<GeneratorArgs>,
   pub null: NullArgs,
   pub array: ArrayArgs
 }

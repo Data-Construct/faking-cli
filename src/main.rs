@@ -1,10 +1,17 @@
-use std::path::PathBuf;
+extern crate lazy_static;
+
 use clap::{error, Parser, Subcommand};
+use output_formats::json::generate_json_output;
+use std::path::PathBuf;
 
 use crate::json_reader::deserialize::deserialize;
 
+mod data_faking_bridge;
 mod file_reader;
 mod json_reader;
+mod output_formats;
+
+// use output_formats::json::GenerateJSONOutput;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -42,25 +49,10 @@ fn main() {
         println!("Value for name: {name}");
     }
 
-    if let Some(config_path) = cli.config.as_deref() {
-        println!("Value for config: {}", config_path.display());
-        let mut vec_res = match file_reader::read(config_path) {
-          Ok(res) => res,
-          Err(error) => return println!("{}", error)
-        };
-
-        let mut struct_res = match deserialize(vec_res) {
-          Ok(res) => res,
-          Err(error) => return println!("{}", error)
-        };
-
-        println!("FIN: {}", struct_res.field_name);
-    }
-
     // You can see how many times a particular flag or argument occurred
     // Note, only flags can have multiple occurrences
     match cli.debug {
-        0 => println!("Debug mode is off"),
+        0 => {} // println!("Debug mode is off"),
         1 => println!("Debug mode is kind of on"),
         2 => println!("Debug mode is on"),
         _ => println!("Don't be crazy"),
@@ -77,5 +69,23 @@ fn main() {
             }
         }
         None => {}
+    }
+
+    if let Some(config_path) = cli.config.as_deref() {
+        // println!("Value for config: {}", config_path.display());
+        let vec_res = match file_reader::read(config_path) {
+            Ok(res) => res,
+            Err(error) => return println!("{}", error),
+        };
+
+        let struct_res = match deserialize(vec_res) {
+            Ok(res) => res,
+            Err(error) => return println!("{}", error),
+        };
+
+        // println!("{:#?}", struct_res);
+        // println!("\n\n\n");
+
+        generate_json_output(&struct_res, 3);
     }
 }

@@ -1,0 +1,202 @@
+{
+	"schema": [
+		{
+			"field_name": "field-1-bool",
+			"generator": "Bool",
+			"generator_arguments": null,
+			"null": {
+				"str": "null_special",
+				"percentage": 30
+			},
+			"array": {
+				"active": true,
+				"min": 1,
+				"max": 10,
+				"null": {
+					"str": null,
+					"percentage": 0
+				}
+			}
+		},
+		{
+			"field_name": "filed-2-i8",
+			"generator": "I8",
+			"generator_arguments": null,
+			"null": {
+				"str": null,
+				"percentage": 0
+			},
+			"array": {
+				"active": false,
+				"min": 0,
+				"max": 0,
+				"null": {
+					"str": null,
+					"percentage": 0
+				}
+			}
+		},
+		{
+			"field_name": "field-3-obj",
+			"null": {
+				"str": null,
+				"percentage": 40
+			},
+			"array": {
+				"active": true,
+				"min": 1,
+				"max": 10,
+				"null": {
+					"str": null,
+					"percentage": 30
+				}
+			},
+			"fields": [
+				{
+					"field_name": "inner-field-1",
+					"generator": "UUID V4",
+					"generator_arguments": null,
+					"null": {
+						"str": null,
+						"percentage": 20
+					},
+					"array": {
+						"active": true,
+						"min": 1,
+						"max": 3,
+						"null": {
+							"str": null,
+							"percentage": 20
+						}
+					}
+				},
+				{
+					"field_name": "inner-field-2",
+					"generator": "UUID V4",
+					"generator_arguments": null,
+					"null": {
+						"str": null,
+						"percentage": 0
+					},
+					"array": {
+						"active": false,
+						"min": 0,
+						"max": 0,
+						"null": {
+							"str": null,
+							"percentage": 0
+						}
+					}
+				},
+				{
+					"field_name": "inner-field-3-obj",
+					"null": {
+						"str": null,
+						"percentage": 0
+					},
+					"array": {
+						"active": false,
+						"min": 0,
+						"max": 0,
+						"null": {
+							"str": null,
+							"percentage": 0
+						}
+					},
+					"fields": [
+						{
+							"field_name": "inner-inner-field-1",
+							"generator": "UUID V4",
+							"generator_arguments": null,
+							"null": {
+								"str": null,
+								"percentage": 0
+							},
+							"array": {
+								"active": false,
+								"min": 0,
+								"max": 0,
+								"null": {
+									"str": null,
+									"percentage": 0
+								}
+							}
+						},
+						{
+							"field_name": "inner-inner-field-1",
+							"generator": "UUID V4",
+							"generator_arguments": null,
+							"null": {
+								"str": null,
+								"percentage": 0
+							},
+							"array": {
+								"active": false,
+								"min": 0,
+								"max": 0,
+								"null": {
+									"str": null,
+									"percentage": 0
+								}
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"field_name": "field-4-obj",
+			"null": {
+				"str": null,
+				"percentage": 20
+			},
+			"array": {
+				"active": false,
+				"min": 0,
+				"max": 0,
+				"null": {
+					"str": null,
+					"percentage": 0
+				}
+			},
+			"fields": [
+				{
+					"field_name": "inner-field-1_4",
+					"generator": "UUID V4",
+					"generator_arguments": null,
+					"null": {
+						"str": null,
+						"percentage": 0
+					},
+					"array": {
+						"active": false,
+						"min": 0,
+						"max": 0,
+						"null": {
+							"str": null,
+							"percentage": 0
+						}
+					}
+				},
+				{
+					"field_name": "inner-field-2_4",
+					"generator": "UUID V4",
+					"generator_arguments": null,
+					"null": {
+						"str": null,
+						"percentage": 0
+					},
+					"array": {
+						"active": false,
+						"min": 0,
+						"max": 0,
+						"null": {
+							"str": null,
+							"percentage": 0
+						}
+					}
+				}
+			]
+		}
+	]
+}
