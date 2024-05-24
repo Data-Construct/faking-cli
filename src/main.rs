@@ -19,6 +19,10 @@ struct Cli {
     /// Optional name to operate on
     name: Option<String>,
 
+    /// Optional number of rows - 3 by default
+    #[arg(short)]
+    n: Option<i64>,
+
     /// Sets a custom config file
     #[arg(short, long, value_name = "FILE")]
     config: Option<PathBuf>,
@@ -86,6 +90,18 @@ fn main() {
         // println!("{:#?}", struct_res);
         // println!("\n\n\n");
 
-        generate_json_output(&struct_res, 3);
+        match cli.n {
+            Some(val) => {
+                let mut n = val;
+                if n < 1 {
+                    n = 1
+                }
+
+                generate_json_output(&struct_res, n);
+            }
+            None => {
+                generate_json_output(&struct_res, 3);
+            }
+        }
     }
 }
