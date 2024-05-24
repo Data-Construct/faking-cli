@@ -195,7 +195,51 @@ fn create_field_string(oc: &mut String, rs: &String) {
             oc.push_str(f().to_string().as_str());
         }
 
+        FNVARI::I16(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::I32(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::I64(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::Isize(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::U8(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::U16(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::U32(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::U64(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::Usize(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
         FNVARI::Bool(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::F32(f) => {
+            oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::F64(f) => {
             oc.push_str(f().to_string().as_str());
         }
 
@@ -203,6 +247,20 @@ fn create_field_string(oc: &mut String, rs: &String) {
             oc.push_str("\"");
             oc.push_str(f().as_str());
             oc.push_str("\"");
+        }
+
+        //.//
+
+        FNVARI::CardData(f) => {
+            // oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::InvalidCardData(f) => {
+            // oc.push_str(f().to_string().as_str());
+        }
+
+        FNVARI::TokenData(f) => {
+            // oc.push_str(f().to_string().as_str());
         }
     }
 }
