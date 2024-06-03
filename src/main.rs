@@ -1,7 +1,9 @@
 extern crate lazy_static;
 
 use clap::{Parser, Subcommand};
+use data_faking_bridge::assoc::get_func_from_string;
 use output_formats::json::generate_json_output;
+use solo_generator::produce_generator_value;
 use std::path::PathBuf;
 
 use crate::json_reader::deserialize::deserialize;
@@ -10,13 +12,20 @@ mod data_faking_bridge;
 mod file_reader;
 mod json_reader;
 mod output_formats;
+mod solo_generator;
 
 // use output_formats::json::GenerateJSONOutput;
+
+const DEFAULT_GEN_AMOUNT: i64 = 3;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    /// Optional number of rows - 3 by default
+    /// Generator string
+    #[arg(index = 1)]
+    generator: Option<String>,
+
+    /// Number of generations to output - 3 by default
     #[arg(short)]
     n: Option<i64>,
 
@@ -27,7 +36,6 @@ struct Cli {
     // /// Turn debugging information on
     // #[arg(short, long, action)]
     // debug: bool,
-
     #[command(subcommand)]
     command: Option<Commands>,
 }
@@ -41,12 +49,46 @@ enum Commands {
     },
 }
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let cli = Cli::parse();
 
     // if cli.debug {
     //     println!("Debugging turned on");
     // }
+
+    match &cli.generator {
+        Some(gstr) => {
+            // println!("{}", gstr);
+            let x = get_func_from_string(gstr);
+
+            let mut gen_amount = DEFAULT_GEN_AMOUNT;
+            match cli.n {
+                Some(val) => {
+                    gen_amount = val;
+                    if gen_amount < 1 {
+                        gen_amount = 1
+                    }
+                }
+
+                None => {}
+            }
+
+
+            let mut oc = String::from("");
+            for i in 0..gen_amount {
+                produce_generator_value(&mut oc, &x);
+
+                if i != gen_amount - 1 {
+                    oc.push('\n');
+                }
+            }
+            println!("{}", oc);
+
+            return Ok(());
+        }
+
+        None => {}
+    }
 
     match &cli.command {
         Some(Commands::List { list }) => {
@@ -55,6 +97,8 @@ fn main() {
             } else {
                 println!("Not printing testing lists...");
             }
+
+            return Ok(());
         }
         None => {}
     }
@@ -64,12 +108,12 @@ fn main() {
 
         let vec_res = match file_reader::read(config_path) {
             Ok(res) => res,
-            Err(error) => return println!("{}", error),
+            Err(error) => return Err(error),
         };
 
         let struct_res = match deserialize(vec_res) {
             Ok(res) => res,
-            Err(error) => return println!("{}", error),
+            Err(error) => return Err(error),
         };
 
         match cli.n {
@@ -82,8 +126,10 @@ fn main() {
                 generate_json_output(&struct_res, n);
             }
             None => {
-                generate_json_output(&struct_res, 3);
+                generate_json_output(&struct_res, DEFAULT_GEN_AMOUNT);
             }
         }
     }
+
+    return Ok(());
 }
