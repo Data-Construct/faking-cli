@@ -5,5 +5,5 @@
 ```bash
 cargo run -- --help
 
-cargo run -- -c .\schemas\testcase.json
+cargo run -- -s .\schemas\testcase.json
 ```

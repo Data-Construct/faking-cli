@@ -1,5 +1,5 @@
 use std::io;
-use super::obj::{DTObj, FieldsEnum, Obj};
+use super::obj::DTObj;
 
 pub fn deserialize(json: Vec<u8>) -> Result<DTObj, io::Error> {
   let res = String::from_utf8(json);

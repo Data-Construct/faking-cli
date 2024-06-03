@@ -1,6 +1,6 @@
 extern crate lazy_static;
 
-use clap::{error, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 use output_formats::json::generate_json_output;
 use std::path::PathBuf;
 
@@ -16,20 +16,17 @@ mod output_formats;
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    /// Optional name to operate on
-    name: Option<String>,
-
     /// Optional number of rows - 3 by default
     #[arg(short)]
     n: Option<i64>,
 
-    /// Sets a custom config file
+    /// Use schema file for generation
     #[arg(short, long, value_name = "FILE")]
-    config: Option<PathBuf>,
+    schema: Option<PathBuf>,
 
-    /// Turn debugging information on
-    #[arg(short, long, action = clap::ArgAction::Count)]
-    debug: u8,
+    // /// Turn debugging information on
+    // #[arg(short, long, action)]
+    // debug: bool,
 
     #[command(subcommand)]
     command: Option<Commands>,
@@ -37,9 +34,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// does testing things
-    Test {
-        /// lists test values
+    /// Prints all generator strings that can be used.
+    List {
         #[arg(short, long)]
         list: bool,
     },
@@ -48,24 +44,12 @@ enum Commands {
 fn main() {
     let cli = Cli::parse();
 
-    // You can check the value provided by positional arguments, or option arguments
-    if let Some(name) = cli.name.as_deref() {
-        println!("Value for name: {name}");
-    }
+    // if cli.debug {
+    //     println!("Debugging turned on");
+    // }
 
-    // You can see how many times a particular flag or argument occurred
-    // Note, only flags can have multiple occurrences
-    match cli.debug {
-        0 => {} // println!("Debug mode is off"),
-        1 => println!("Debug mode is kind of on"),
-        2 => println!("Debug mode is on"),
-        _ => println!("Don't be crazy"),
-    }
-
-    // You can check for the existence of subcommands, and if found use their
-    // matches just as you would the top level cmd
     match &cli.command {
-        Some(Commands::Test { list }) => {
+        Some(Commands::List { list }) => {
             if *list {
                 println!("Printing testing lists...");
             } else {
@@ -75,8 +59,9 @@ fn main() {
         None => {}
     }
 
-    if let Some(config_path) = cli.config.as_deref() {
+    if let Some(config_path) = cli.schema.as_deref() {
         // println!("Value for config: {}", config_path.display());
+
         let vec_res = match file_reader::read(config_path) {
             Ok(res) => res,
             Err(error) => return println!("{}", error),
@@ -86,9 +71,6 @@ fn main() {
             Ok(res) => res,
             Err(error) => return println!("{}", error),
         };
-
-        // println!("{:#?}", struct_res);
-        // println!("\n\n\n");
 
         match cli.n {
             Some(val) => {

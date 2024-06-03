@@ -251,15 +251,15 @@ fn create_field_string(oc: &mut String, rs: &String) {
 
         //.//
 
-        FNVARI::CardData(f) => {
+        FNVARI::CardData(_f) => {
             // oc.push_str(f().to_string().as_str());
         }
 
-        FNVARI::InvalidCardData(f) => {
+        FNVARI::InvalidCardData(_f) => {
             // oc.push_str(f().to_string().as_str());
         }
 
-        FNVARI::TokenData(f) => {
+        FNVARI::TokenData(_f) => {
             // oc.push_str(f().to_string().as_str());
         }
     }
