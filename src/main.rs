@@ -11,9 +11,9 @@ use crate::json_reader::deserialize::deserialize;
 mod data_faking_bridge;
 mod file_reader;
 mod json_reader;
+mod list_subcommand;
 mod output_formats;
 mod solo_generator;
-mod list_subcommand;
 
 // use output_formats::json::GenerateJSONOutput;
 
@@ -47,6 +47,9 @@ enum Commands {
     List {
         #[arg(short, long)]
         category: Option<String>,
+
+        #[arg(short, long)]
+        show_categories: bool,
     },
 }
 
@@ -91,10 +94,18 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     match &cli.command {
-        Some(Commands::List { category }) => {
+        Some(Commands::List {
+            category,
+            show_categories,
+        }) => {
+            if *show_categories {
+                list_subcommand::print_categories();
+                return Ok(());
+            }
+
             match category {
-                Some(c) => {
-                    println!("Printing testing lists... {}", c);
+                Some(cat) => {
+                    list_subcommand::print_category(cat);
                     return Ok(());
                 }
 
@@ -103,11 +114,8 @@ fn main() -> Result<(), std::io::Error> {
                     return Ok(());
                 }
             }
-
-            // if {
-            //     println!("Not printing testing lists...");
-            // }
         }
+
         None => {}
     }
 

@@ -1,28 +1,151 @@
+pub fn print_categories() {
+    println!(
+        r#"Categories
+api
+blockchain
+coding
+countries
+dates
+finance
+games
+geo
+media
+misc
+networking
+people
+types
+religion"#
+    );
+}
+
+pub fn print_category(category: &str) {
+    match category {
+        "api" => category_api(),
+        "blockchain" => category_blockchain(),
+        "coding" => category_coding(),
+        "countries" => category_countries(),
+        "dates" => category_dates(),
+        "finance" => category_finance(),
+        "games" => category_games(),
+        "geo" => category_geo(),
+        "media" => category_media(),
+        "misc" => category_misc(),
+        "networking" => category_networking(),
+        "people" => category_people(),
+        "types" => native_types(),
+        "religion" => bible(),
+
+        _ => {
+            println!("Category not found.");
+        }
+    }
+}
+
 pub fn print_all() {
     native_types();
 
-    // people
+    category_people();
+
+    category_coding();
+
+    category_blockchain();
+
+    category_networking();
+
+    category_misc();
+
+    bible();
+
+    category_games();
+
+    category_media();
+
+    category_api();
+
+    category_finance();
+
+    category_dates();
+
+    category_geo();
+
+    category_countries();
+}
+
+pub fn category_coding() {
+    lorem_ipsum();
+    crypto_hashes();
+}
+
+pub fn category_dates() {
+    datetime();
+    sql_datetime();
+}
+
+pub fn category_finance() {
+    currencies();
+}
+
+pub fn category_geo() {
+    cordinates();
+    compass();
+}
+
+pub fn category_api() {
+    stripe();
+}
+
+pub fn category_networking() {
+    ipv4();
+    ipv6();
+}
+
+pub fn category_blockchain() {
+    cryptocurrency();
+    bitcoin();
+    ethereum();
+}
+
+pub fn category_people() {
     names();
     phone_numbers();
     emails();
     relationships();
     demographic();
     blood();
+}
 
-    crypto_hashes();
+pub fn category_countries() {
+    usa_locations();
+    canada_locations();
+}
 
-    lorem_ipsum();
+pub fn category_games() {
+    minecraft();
+    mario();
+    games();
+}
 
-    //blockchain
-    cryptocurrency();
-    bitcoin();
-    ethereum();
+pub fn category_media() {
+    tolkein();
+    hobbit();
+    studio_ghibli();
+    starwars();
+    spongebob();
+    simpsons();
+    silicon_valley();
+    seinfeld();
+    pokenmon();
+    one_piece();
+    movies();
+    manga();
+    lord_of_the_rings();
+    kpop();
+    lovecraft();
+    friends();
+    elder_scrolls();
+}
 
-    //networking
-    ipv4();
-    ipv6();
-
-    // misc
+pub fn category_misc() {
     tea();
     sports();
     space();
@@ -50,48 +173,9 @@ pub fn print_all() {
     animals();
     ancients();
     adjective();
-
-    bible();
-
-    //games
-    minecraft();
-    mario();
-    games();
-
-    //media
-    tolkein();
-    hobbit();
-    studio_ghibli();
-    starwars();
-    spongebob();
-    simpsons();
-    silicon_valley();
-    seinfeld();
-    pokenmon();
-    one_piece();
-    movies();
-    manga();
-    lord_of_the_rings();
-    kpop();
-    lovecraft();
-    friends();
-    elder_scrolls();
-
-    // api
-    stripe();
-
-    currencies();
-
-    datetime();
-    sql_datetime();
-
-    cordinates();
-    compass();
-
-    // countries
-    usa_locations();
-    canada_locations();
 }
+
+////
 
 pub fn native_types() {
     println!(
