@@ -13,6 +13,7 @@ mod file_reader;
 mod json_reader;
 mod output_formats;
 mod solo_generator;
+mod list_subcommand;
 
 // use output_formats::json::GenerateJSONOutput;
 
@@ -45,7 +46,7 @@ enum Commands {
     /// Prints all generator strings that can be used.
     List {
         #[arg(short, long)]
-        list: bool,
+        category: Option<String>,
     },
 }
 
@@ -73,7 +74,6 @@ fn main() -> Result<(), std::io::Error> {
                 None => {}
             }
 
-
             let mut oc = String::from("");
             for i in 0..gen_amount {
                 produce_generator_value(&mut oc, &x);
@@ -91,14 +91,22 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     match &cli.command {
-        Some(Commands::List { list }) => {
-            if *list {
-                println!("Printing testing lists...");
-            } else {
-                println!("Not printing testing lists...");
+        Some(Commands::List { category }) => {
+            match category {
+                Some(c) => {
+                    println!("Printing testing lists... {}", c);
+                    return Ok(());
+                }
+
+                None => {
+                    list_subcommand::print_all();
+                    return Ok(());
+                }
             }
 
-            return Ok(());
+            // if {
+            //     println!("Not printing testing lists...");
+            // }
         }
         None => {}
     }
