@@ -1,3 +1,5 @@
+use std::process;
+
 use data_faking::data::api::stripe::card::{CardData, InvalidCardData, TokenData};
 
 pub enum FNVARI {
@@ -553,6 +555,10 @@ pub fn get_func_from_string(arg: &String) -> FNVARI {
         "USA - Street Address" => FNVARI::String(data_faking::data::countries::usa::addresses::street_address),
         "USA - Secondary Address" => FNVARI::String(data_faking::data::countries::usa::addresses::secondary_address),
         "USA - Full Address" => FNVARI::String(data_faking::data::countries::usa::addresses::full_address),
-        _ => panic!("{} - no function found for this string", arg)
+
+        _ => {
+            eprintln!("\"{}\" - no generator found for this string. Try using the `faking list` command to see available generators.", arg);
+            process::exit(0);
+        }
     }
 }
