@@ -9,17 +9,23 @@ use crate::{
 };
 
 pub fn generate_json_output(grs: &DTObj, n_rows: i64) {
-    let mut content = "[\n".to_owned();
+    let mut content = "".to_owned();
 
-    for i in 0..n_rows {
-        content.push_str(&loop_through_nested_obj(&grs.schema, 0));
+    if n_rows == 1 {
+        content.push_str(&loop_through_nested_obj(&grs.schema, -1));
+    } else {
+        content.push_str("[\n");
 
-        if i != n_rows - 1 {
-            content.push_str(",\n");
+        for i in 0..n_rows {
+            content.push_str(&loop_through_nested_obj(&grs.schema, 0));
+
+            if i != n_rows - 1 {
+                content.push_str(",\n");
+            }
         }
-    }
 
-    content.push_str("\n]");
+        content.push_str("\n]");
+    }
 
     println!("{}", content);
 
@@ -28,14 +34,14 @@ pub fn generate_json_output(grs: &DTObj, n_rows: i64) {
 
 fn loop_through_nested_obj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
     let mut oc = "".to_owned();
-    if depth >= 1 {
+    if depth >= 1 || depth == -1 {
         oc.push_str("{\n");
     } else {
         oc.push_str("\t{\n");
     }
 
     for i in 0..rows.len() {
-        insert_depth_indentation(&mut oc, depth, "\t\t", "");
+        insert_depth_indentation(&mut oc, depth + 1, "\t", "");
 
         match &rows[i] {
             FieldsEnum::Obj(obj) => {
@@ -104,7 +110,7 @@ fn loop_through_nested_obj(rows: &Vec<FieldsEnum>, depth: i16) -> String {
         }
     }
 
-    insert_depth_indentation(&mut oc, depth, "\n\t", "}");
+    insert_depth_indentation(&mut oc, depth + 1, "\n", "}");
 
     oc
 }
@@ -133,7 +139,7 @@ fn insert_null_or_custom_string(oc: &mut String, null_string: &Option<String>) {
 fn obj_array_generation(oc: &mut String, obj: &Obj, depth: i16) {
     let arr_range = rand::thread_rng().gen_range(obj.array.min..obj.array.max);
 
-    insert_depth_indentation(oc, depth, "[\n\t\t\t", "");
+    insert_depth_indentation(oc, depth + 1, "[\n\t\t", "");
 
     for _a in 0..depth {
         oc.push_str("\t");
@@ -152,11 +158,11 @@ fn obj_array_generation(oc: &mut String, obj: &Obj, depth: i16) {
         }
 
         if a != arr_range - 1 {
-            insert_depth_indentation(oc, depth, ",\n\t\t\t", "");
+            insert_depth_indentation(oc, depth + 1, ",\n\t\t", "");
         }
     }
 
-    insert_depth_indentation(oc, depth, "\n\t\t", "]");
+    insert_depth_indentation(oc, depth + 1, "\n\t", "]");
 }
 
 fn row_array_generation(oc: &mut String, row: &Row) {
@@ -250,7 +256,6 @@ fn create_field_string(oc: &mut String, rs: &String) {
         }
 
         //.//
-
         FNVARI::CardData(_f) => {
             // oc.push_str(f().to_string().as_str());
         }
