@@ -1,4 +1,20 @@
-# faking-cli
+<div align="center">
+
+# @dataconstruct/faking (cli)
+
+Generate massive amounts of fake (but realistic) data for testing and development.
+
+[![Latest Version](https://img.shields.io/crates/v/faking.svg)](https://crates.io/crates/faking)
+
+If you want to use the faking library in either rust or javascript head over to [faking-lib](https://github.com/Data-Construct/faking)
+
+</div>
+
+## Playground
+
+Schema files for the cli can be created through our webapp at [playground](https://www.dataconstruct.io/organizations/playground/schemas). 
+
+Once you draw up your schema, click the cli button for the schema file output format.
 
 ## Usage
 
