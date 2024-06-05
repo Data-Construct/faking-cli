@@ -1,6 +1,6 @@
 [package]
 name = "faking"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 description = "faking is a cli tool that generates test data in various formats from a given schema"
 license = "MPL-2.0"

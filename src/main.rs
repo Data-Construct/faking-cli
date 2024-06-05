@@ -132,19 +132,35 @@ fn main() -> Result<(), std::io::Error> {
             Err(error) => return Err(error),
         };
 
+        let mut n_rows = DEFAULT_GEN_AMOUNT;
+
+        match struct_res.meta.as_ref() {
+            Some(meta) => match meta.number {
+                Some(number) => {
+                    n_rows = number;
+
+                    if n_rows < 1 {
+                        n_rows = 1
+                    }
+                }
+                None => {}
+            },
+
+            None => {}
+        }
+
         match cli.n {
             Some(val) => {
-                let mut n = val;
-                if n < 1 {
-                    n = 1
+                n_rows = val;
+                if n_rows < 1 {
+                    n_rows = 1
                 }
+            }
 
-                generate_json_output(&struct_res, n);
-            }
-            None => {
-                generate_json_output(&struct_res, DEFAULT_GEN_AMOUNT);
-            }
+            None => {}
         }
+
+        generate_json_output(&struct_res, n_rows);
     }
 
     return Ok(());

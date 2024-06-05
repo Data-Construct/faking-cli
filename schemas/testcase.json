@@ -1,4 +1,7 @@
 {
+	"meta": {
+		"number": 1
+	},
 	"schema": [
 		{
 			"field_name": "field-1-bool",

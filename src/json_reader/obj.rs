@@ -17,7 +17,13 @@ pub struct Obj {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct MetaObj {
+  pub output: Option<String>,
+  pub number: Option<i64>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DTObj {
-  // meta: Option<MetaObj>,
+  pub meta: Option<MetaObj>,
   pub schema: Vec<FieldsEnum>
 }
